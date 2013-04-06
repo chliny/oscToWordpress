@@ -212,19 +212,33 @@ class oscToWordpress:
         return footer
 
 
-    def __init__(self,filename):
-        allContent = self.readFile(filename)
+    def trans(self):
+        allContent = self.readFile(self.filename)
         contentList = self.cutPost(allContent)
         wordpressContent = self.toWordpress(contentList)
         self.writeFile('wordpress'+str(time.time())+'.xml',wordpressContent)
 
+    def setAuthor(self,name):
+        self.author = name
+
+    def setCommentStatus(self,status):
+        self.comment_status = status
+
+    def setBlogTitle(self,title):
+        self.blogTitle = title
+
+    def setFile(self,name):
+        self.filename = name
+
+    def setBlogLink(self,link):
+        self.blogLink = link
+
+    def __init__(self,filename=""):
+        self.setFile(filename)
+
+	filename = ''
     author = u'chliny'#作者
     comment_status = u'open'#是否开放评论
     blogTitle = u'chliny'#原博客名称
     blogLink = u'http://my.oschina.net/chliny/blog'#原博客地址
-
-
-if __name__ == "__main__":
-    filename = './blogs_20130325.html'
-    trans = oscToWordpress(filename)
 
