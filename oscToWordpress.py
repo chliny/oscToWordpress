@@ -13,8 +13,6 @@ class oscToWordpress:
     def readFile(self,filename):
         file = codecs.open(filename,'rb','utf8') 
         content = file.read()
-        #content = content.encode('utf8')
-        #content = unicode(content,'utf8')
         patern = ur'<div class=\'blogList\'>.*?<\/body>'
         contentObj =re.search(patern,content,re.S)
         file.close()
@@ -142,44 +140,45 @@ class oscToWordpress:
              outPut.append(result)
         return outPut
 
+    #整合成一个完成的xml
     def toWordpress(self,contentList):
         header = self.getHeader()
         contentStr = header[:]
         for blog in contentList:
-            contentStr += '\t<item>\n'
-            contentStr += '\t\t<title>'+blog['title']+'</title>\n'
-            contentStr += '\t\t<link>'+blog['link']+'</link>\n'
-            contentStr += '\t\t<pubDate>'+blog['date']+'</pubDate>\n'
-            contentStr += '\t\t<dc:creator>'+self.author+'</dc:creator>\n'
-            contentStr += '\t\t<description></description>\n'
-            contentStr += '\t\t<content:encoded><![CDATA['+blog['post']+']]></content:encoded>\n'
-            contentStr += '\t\t<excerpt:encoded><![CDATA[]]></excerpt:encoded>\n'
-            contentStr += '\t\t<wp:post_id>'+blog['id']+'</wp:post_id\n>'
-            contentStr += '\t\t<wp:post_date>'+blog['date']+'</wp:post_date>\n'
-            contentStr += '\t\t<wp:post_date_gmt>'+blog['date']+'</wp:post_date_gmt>\n'
-            contentStr += '\t\t<wp:comment_status>'+self.comment_status+'</wp:comment_status>\n'
-            contentStr += '\t\t<wp:ping_status>'+self.ping_status+'</wp:ping_status>\n'
-            contentStr += '\t\t<wp:post_name>'+blog['title']+'</wp:post_name>\n'
-            contentStr += '\t\t<wp:status>publish</wp:status>\n'
-            contentStr += '\t\t<wp:post_parent>0</wp:post_parent>\n'
-            contentStr += '\t\t<wp:menu_order>0</wp:menu_order>\n'
-            contentStr += '\t\t<wp:post_type>post</wp:post_type>\n'
-            contentStr += '\t\t<wp:post_password></wp:post_password>\n'
-            contentStr += '\t\t<wp:is_sticky>0</wp:is_sticky>\n'
+            contentStr += u'\t<item>\n'
+            contentStr += u'\t\t<title>'+blog['title']+'</title>\n'
+            contentStr += u'\t\t<link>'+blog['link']+'</link>\n'
+            contentStr += u'\t\t<pubDate>'+blog['date']+'</pubDate>\n'
+            contentStr += u'\t\t<dc:creator>'+self.author+'</dc:creator>\n'
+            contentStr += u'\t\t<description></description>\n'
+            contentStr += u'\t\t<content:encoded><![CDATA['+blog['post']+']]></content:encoded>\n'
+            contentStr += u'\t\t<excerpt:encoded><![CDATA[]]></excerpt:encoded>\n'
+            contentStr += u'\t\t<wp:post_id>'+blog['id']+'</wp:post_id>\n'
+            contentStr += u'\t\t<wp:post_date>'+blog['date']+'</wp:post_date>\n'
+            contentStr += u'\t\t<wp:post_date_gmt>'+blog['date']+'</wp:post_date_gmt>\n'
+            contentStr += u'\t\t<wp:comment_status>'+self.comment_status+'</wp:comment_status>\n'
+            contentStr += u'\t\t<wp:ping_status>open</wp:ping_status>\n'
+            contentStr += u'\t\t<wp:post_name>'+blog['title']+'</wp:post_name>\n'
+            contentStr += u'\t\t<wp:status>publish</wp:status>\n'
+            contentStr += u'\t\t<wp:post_parent>0</wp:post_parent>\n'
+            contentStr += u'\t\t<wp:menu_order>0</wp:menu_order>\n'
+            contentStr += u'\t\t<wp:post_type>post</wp:post_type>\n'
+            contentStr += u'\t\t<wp:post_password></wp:post_password>\n'
+            contentStr += u'\t\t<wp:is_sticky>0</wp:is_sticky>\n'
 
             for tag in blog['tags'].split(','):
-                contentStr += '\t\t<category domain="post_tag" nicename="'+tag+'"><![CDATA['+tag+']]></category>\n'
+                contentStr += u'\t\t<category domain="post_tag" nicename="'+tag+'"><![CDATA['+tag+']]></category>\n'
 
-            contentStr += '\t\t<category domain="category" nicename="'+blog['catalog']+'"><![CDATA['+blog['catalog']+']]></category>\n'
-            contentStr += '\t\t<wp:postmeta>\n'
-            contentStr += '\t\t\t<wp:meta_key>_syntaxhighlighter_encoded</wp:meta_key>\n'
-            contentStr += '\t\t\t<wp:meta_value><![CDATA[1]]></wp:meta_value>\n'
-            contentStr += '\t\t</wp:postmeta>\n'
-            contentStr += '\t\t<wp:postmeta>\n'
-            contentStr += '\t\t\t<wp:meta_key>_edit_last</wp:meta_key>\n'
-            contentStr += '\t\t\t<wp:meta_value><![CDATA[1]]></wp:meta_value>\n'
-            contentStr += '\t\t</wp:postmeta>\n'
-            contentStr += '\t</item>\n'
+            contentStr += u'\t\t<category domain="category" nicename="'+blog['catalog']+'"><![CDATA['+blog['catalog']+']]></category>\n'
+            contentStr += u'\t\t<wp:postmeta>\n'
+            contentStr += u'\t\t\t<wp:meta_key>_syntaxhighlighter_encoded</wp:meta_key>\n'
+            contentStr += u'\t\t\t<wp:meta_value><![CDATA[1]]></wp:meta_value>\n'
+            contentStr += u'\t\t</wp:postmeta>\n'
+            contentStr += u'\t\t<wp:postmeta>\n'
+            contentStr += u'\t\t\t<wp:meta_key>_edit_last</wp:meta_key>\n'
+            contentStr += u'\t\t\t<wp:meta_value><![CDATA[1]]></wp:meta_value>\n'
+            contentStr += u'\t\t</wp:postmeta>\n'
+            contentStr += u'\t</item>\n'
 
         footer = self.getFooter()
         contentStr += footer
@@ -187,7 +186,8 @@ class oscToWordpress:
         return contentStr 
 
     def getHeader(self):
-        header = '<?xml version="1.0" encoding="UTF-8" ?>\n\
+        header = u'<?xml version="1.0" encoding="UTF-8" ?>\n\
+\n\
 <rss version="2.0"\n\
 \txmlns:excerpt="http://wordpress.org/export/1.2/excerpt/"\n\
 \txmlns:content="http://purl.org/rss/1.0/modules/content/"\n\
@@ -196,7 +196,15 @@ class oscToWordpress:
 \txmlns:wp="http://wordpress.org/export/1.2/"\n\
 >\n\
 \n\
-<channel>\n'
+<channel>\n\
+\t<title>'+self.blogTitle+'</title>\n\
+\t<link>'+self.blogLink+'</title>\n\
+\t<description></description>\n\
+\t<pubDate>'+str(time.time())+'</pubDate>\n\
+\t<language>zh-CN</language>\n\
+\t<wp:wxr_version>1.2</wp:wxr_version>\n\
+\t<wp:base_site_url>'+self.blogLink+'</wp:base_site_url>\n\
+\t<wp:base_blog_url>'+self.blogLink+'</wp:base_blog_url>\n'
         return header
 
     def getFooter(self):
@@ -210,9 +218,10 @@ class oscToWordpress:
         wordpressContent = self.toWordpress(contentList)
         self.writeFile('wordpress'+str(time.time())+'.xml',wordpressContent)
 
-    author = 'chliny'
-    comment_status = 'open'
-    ping_status = 'open'
+    author = u'chliny'#作者
+    comment_status = u'open'#是否开放评论
+    blogTitle = u'chliny'#原博客名称
+    blogLink = u'http://my.oschina.net/chliny/blog'#原博客地址
 
 
 if __name__ == "__main__":
