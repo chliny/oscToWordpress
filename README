@@ -1,2 +1,4 @@
-将从oschina博客（http://www.oschina.net/blog）导出的html文件转化成wordpress能够识别导入的xml文件
+将从oschina博客（http://www.oschina.net/blog）导出的html文件转化成wordpress能够识别导入的xml文件的一个python脚本
 能力所限，目前未对评论及文件图片、视频做转化
+
+如test.py文件，设定好相关信息后执行test.py，即可生成xml文件，文件名为wordpress+当前时间戳.xml
